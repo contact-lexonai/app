@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../js/theme.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>List a Video — LEXON AI</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" href="../assets/logos/lexon-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    .lv-shell {
+      width: min(520px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 110px;
+    }
+
+    .lv-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 18px;
+      color: var(--lexon-text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .lv-back svg { width: 16px; height: 16px; }
+
+    .lv-screen { display: none; }
+    .lv-screen.active { display: block; }
+
+    /* ---- Trial intro banner ---- */
+    .lv-trial-banner {
+      padding: 22px;
+      border-radius: var(--lexon-radius-lg);
+      background: linear-gradient(160deg, #635BFF 0%, #4b3ff0 100%);
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .lv-trial-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .lv-trial-banner h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .lv-trial-banner p {
+      margin: 0;
+      font-size: 13px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .lv-trial-notice {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lv-trial-notice-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    .lv-trial-notice-row svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .lv-trial-notice-row.warn {
+      opacity: 0.85;
+      font-weight: 600;
+    }
+
+    .lv-card {
+      padding: 24px;
+      border: 1px solid var(--lexon-border);
+      border-radius: var(--lexon-radius-lg);
+      background: #fff;
+      box-shadow: var(--lexon-shadow-sm);
+    }
+
+    .lv-card h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .lv-card > p {
+      margin: 0 0 20px;
+      color: var(--lexon-text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .lv-otp-inputs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .lv-otp-inputs input {
+      width: 100%;
+      min-height: 52px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      border: 1px solid var(--lexon-border-strong);
+      border-radius: 12px;
+    }
+
+    .lv-otp-inputs input:focus {
+      border-color: var(--lexon-accent);
+      box-shadow: 0 0 0 4px rgba(99, 91, 255, 0.1);
+      outline: none;
+    }
+
+    .lv-claim-block {
+      text-align: center;
+      padding: 32px 16px;
+    }
+
+    .lv-claim-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--lexon-accent-soft);
+      color: var(--lexon-accent);
+    }
+
+    .lv-claim-icon svg { width: 26px; height: 26px; }
+
+    .lv-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--lexon-surface-soft);
+      border: 1px solid var(--lexon-border);
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .lv-progress strong { font-weight: 800; color: var(--lexon-accent); }
+
+    .lv-progress-track {
+      flex: 1;
+      height: 6px;
+      margin: 0 12px;
+      border-radius: 999px;
+      background: var(--lexon-border);
+      overflow: hidden;
+    }
+
+    .lv-progress-fill {
+      height: 100%;
+      background: var(--lexon-accent);
+      border-radius: 999px;
+    }
+
+    .lv-locked-analytics {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--lexon-surface-soft);
+      color: var(--lexon-text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+
+    .lv-locked-analytics svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    .lv-paywall-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+
+    .lv-paywall-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .lv-paywall-feature svg {
+      width: 18px;
+      height: 18px;
+      color: var(--lexon-accent);
+      flex-shrink: 0;
+    }
+
+    .lv-paywall-price {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .lv-paywall-price strong {
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .lv-paywall-price span {
+      color: var(--lexon-text-secondary);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html" aria-label="LEXON AI Home">
+        <span class="brand-mark" aria-hidden="true"><img src="../assets/logos/lexon-icon.svg" alt=""></span>
+        <span class="brand-name">LEXON AI</span>
+      </a>
+      <div class="header-actions">
+        <a class="icon-button avatar-link" href="../pages/profile.html" aria-label="Profile">
+          <span class="avatar" id="headerAvatar">C</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="lv-shell">
+    <a class="lv-back" href="dashboard.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+      Back to Creator Workspace
+    </a>
+
+    <!-- ============ SCREEN: loading ============ -->
+    <section class="lv-screen active" id="screenLoading">
+      <div class="lv-card">
+        <p style="margin:0">Loading your creator status…</p>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: trial intro ============ -->
+    <section class="lv-screen" id="screenIntro">
+      <div class="lv-trial-banner">
+        <span class="lv-trial-pill">✦ One Month Free Trial</span>
+        <h1>List your videos, free for 30 days.</h1>
+        <p>Add your YouTube videos to LEXON AI and get discovered by learners.</p>
+
+        <div class="lv-trial-notice">
+          <div class="lv-trial-notice-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span>7 video listings included</span>
+          </div>
+          <div class="lv-trial-notice-row warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="M6 6l12 12"></path></svg>
+            <span>No analytics during the free trial</span>
+          </div>
+          <div class="lv-trial-notice-row warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="M6 6l12 12"></path></svg>
+            <span>No other features — only video listing</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%" onclick="goTo('screenSignup')">Continue</button>
+    </section>
+
+    <!-- ============ SCREEN: signup form ============ -->
+    <section class="lv-screen" id="screenSignup">
+      <div class="lv-card">
+        <h2>Claim your free trial</h2>
+        <p>Fill your details to get started — no payment needed.</p>
+
+        <form class="auth-form" id="signupForm" onsubmit="return handleSignupSubmit(event)">
+          <div class="form-group">
+            <label for="lvName">Full name</label>
+            <input type="text" id="lvName" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="lvPhone">Phone number</label>
+            <input type="tel" id="lvPhone" required placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label for="lvEmail">Gmail / Email</label>
+            <input type="email" id="lvEmail" required placeholder="you@gmail.com">
+          </div>
+          <p class="form-message" id="signupMessage"></p>
+          <button class="btn btn-primary auth-submit" type="submit">Continue</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: already claimed ============ -->
+    <section class="lv-screen" id="screenAlreadyClaimed">
+      <div class="lv-card lv-claim-block">
+        <div class="lv-claim-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+        </div>
+        <h2>Already claimed</h2>
+        <p>This phone number has already used its one-time free trial. Please sign in with that account, or choose the ₹99 per video plan below.</p>
+        <button class="btn btn-secondary" style="width:100%; margin-top:6px" onclick="goTo('screenPaywall')">See ₹99 / video plan</button>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: OTP ============ -->
+    <section class="lv-screen" id="screenOtp">
+      <div class="lv-card">
+        <h2>Verify your number</h2>
+        <p>We've sent a 6-digit code to <strong id="otpPhoneDisplay"></strong>.</p>
+
+        <form onsubmit="return handleOtpSubmit(event)">
+          <div class="form-group">
+            <label for="lvOtp">Enter OTP</label>
+            <input type="text" id="lvOtp" inputmode="numeric" maxlength="6" required placeholder="••••••" style="letter-spacing:6px; font-size:18px; text-align:center; font-weight:700;">
+          </div>
+          <p class="form-message" id="otpMessage"></p>
+          <button class="btn btn-primary auth-submit" type="submit">Confirm</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: submit video (trial) ============ -->
+    <section class="lv-screen" id="screenSubmitTrial">
+      <div class="lv-progress">
+        <span>Trial listings</span>
+        <div class="lv-progress-track"><div class="lv-progress-fill" id="trialProgressFill" style="width:0%"></div></div>
+        <span><strong id="trialUsedCount">0</strong>/7</span>
+      </div>
+
+      <div class="lv-card">
+        <h2>List a video</h2>
+        <p>Paste your YouTube video's title and link — it'll appear on LEXON AI instantly.</p>
+
+        <form id="trialVideoForm" onsubmit="return handleVideoSubmit(event, false)">
+          <div class="form-group">
+            <label for="trialVideoTitle">Video title</label>
+            <input type="text" id="trialVideoTitle" required placeholder="e.g. How to create AI thumbnails">
+          </div>
+          <div class="form-group">
+            <label for="trialVideoUrl">YouTube link</label>
+            <input type="url" id="trialVideoUrl" required placeholder="https://youtube.com/watch?v=...">
+          </div>
+          <p class="form-message" id="trialVideoMessage"></p>
+          <button class="btn btn-primary auth-submit" type="submit">Add video</button>
+        </form>
+
+        <div class="lv-locked-analytics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          Analytics locked during free trial
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: paywall (trial over) ============ -->
+    <section class="lv-screen" id="screenPaywall">
+      <div class="lv-card">
+        <h2>Your free trial has ended</h2>
+        <p>Keep listing videos and unlock full analytics, ranking &amp; promotion.</p>
+
+        <div class="lv-paywall-price">
+          <strong>₹99</strong>
+          <span>per video listing</span>
+        </div>
+
+        <div class="lv-paywall-features">
+          <div class="lv-paywall-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+            Full video analytics
+          </div>
+          <div class="lv-paywall-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7Z"></path></svg>
+            Video ranking
+          </div>
+          <div class="lv-paywall-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-8-8 18-2-8-8-2Z"></path></svg>
+            Video promotion
+          </div>
+          <div class="lv-paywall-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-4"></path></svg>
+            Best performance boost
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%" onclick="goTo('screenSubmitPaid')">Continue — ₹99 per video</button>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: submit video (paid) ============ -->
+    <section class="lv-screen" id="screenSubmitPaid">
+      <div class="lv-card">
+        <h2>List a video</h2>
+        <p>₹99 per listing. Full analytics, ranking &amp; promotion included.</p>
+
+        <form id="paidVideoForm" onsubmit="return handleVideoSubmit(event, true)">
+          <div class="form-group">
+            <label for="paidVideoTitle">Video title</label>
+            <input type="text" id="paidVideoTitle" required placeholder="e.g. How to create AI thumbnails">
+          </div>
+          <div class="form-group">
+            <label for="paidVideoUrl">YouTube link</label>
+            <input type="url" id="paidVideoUrl" required placeholder="https://youtube.com/watch?v=...">
+          </div>
+          <p class="form-message" id="paidVideoMessage"></p>
+          <button class="btn btn-primary auth-submit" type="submit">Add video — ₹99</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: success ============ -->
+    <section class="lv-screen" id="screenSuccess">
+      <div class="lv-card lv-claim-block">
+        <div class="lv-claim-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h2>Video added</h2>
+        <p id="successMessage">Your video is now live on LEXON AI.</p>
+        <button class="btn btn-secondary" style="width:100%; margin-top:6px" onclick="location.href='dashboard.html'">Back to dashboard</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script>
+    const TRIAL_LIMIT = 7;
+    let currentUser = null;
+    let currentProfile = null;
+    let currentTrial = null;
+    let pendingSignup = null; // { name, phone, email }
+
+    function goTo(screenId) {
+      document.querySelectorAll(".lv-screen").forEach(el => el.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function extractYouTubeId(url) {
+      try {
+        const parsed = new URL(url);
+        if (!parsed.hostname.includes("youtube.com") && !parsed.hostname.includes("youtu.be")) return "";
+        if (parsed.hostname.includes("youtu.be")) return parsed.pathname.replace("/", "").split("/")[0];
+        if (parsed.pathname.startsWith("/shorts/")) return parsed.pathname.split("/")[2] || "";
+        return parsed.searchParams.get("v") || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    async function init() {
+      const client = window.LexonSupabase?.client();
+      if (!client) {
+        goTo("screenIntro");
+        return;
+      }
+
+      currentUser = await window.LexonSupabase.getCurrentUser();
+      if (!currentUser) {
+        // Not logged in — send them to sign in first, then come back here.
+        window.location.href = "../pages/login.html?next=creator/list-video.html";
+        return;
+      }
+
+      const { data: profile } = await client
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+      currentProfile = profile;
+
+      const { data: trial } = await client
+        .from("creator_trials")
+        .select("*")
+        .eq("profile_id", currentUser.id)
+        .maybeSingle();
+
+      if (!trial) {
+        goTo("screenIntro");
+        return;
+      }
+
+      currentTrial = trial;
+
+      const isExpired = new Date(trial.trial_expires_at) < new Date();
+      const isFull = trial.videos_used >= trial.video_limit;
+
+      if (trial.status === "converted" || (trial.status !== "active")) {
+        goTo("screenSubmitPaid");
+      } else if (isExpired || isFull) {
+        goTo("screenPaywall");
+      } else {
+        renderTrialProgress();
+        goTo("screenSubmitTrial");
+      }
+    }
+
+    function renderTrialProgress() {
+      if (!currentTrial) return;
+      const used = currentTrial.videos_used || 0;
+      document.getElementById("trialUsedCount").textContent = used;
+      document.getElementById("trialProgressFill").style.width = Math.min(100, (used / TRIAL_LIMIT) * 100) + "%";
+    }
+
+    async function handleSignupSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById("lvName").value.trim();
+      const phone = document.getElementById("lvPhone").value.trim();
+      const email = document.getElementById("lvEmail").value.trim();
+      const msg = document.getElementById("signupMessage");
+      msg.textContent = "";
+
+      const client = window.LexonSupabase?.client();
+      if (!client) {
+        msg.textContent = "Connection not ready. Please try again.";
+        msg.classList.add("error");
+        return false;
+      }
+
+      // Has this phone number already claimed a free trial before?
+      const { data: existing } = await client
+        .from("creator_trials")
+        .select("id")
+        .eq("phone", phone)
+        .maybeSingle();
+
+      if (existing) {
+        goTo("screenAlreadyClaimed");
+        return false;
+      }
+
+      pendingSignup = { name, phone, email };
+
+      const { error } = await client.auth.signInWithOtp({ phone });
+      if (error) {
+        msg.textContent = "Could not send OTP: " + error.message;
+        msg.classList.add("error");
+        return false;
+      }
+
+      document.getElementById("otpPhoneDisplay").textContent = phone;
+      goTo("screenOtp");
+      return false;
+    }
+
+    async function handleOtpSubmit(event) {
+      event.preventDefault();
+      const code = document.getElementById("lvOtp").value.trim();
+      const msg = document.getElementById("otpMessage");
+      msg.textContent = "";
+
+      const client = window.LexonSupabase?.client();
+      if (!client || !pendingSignup) return false;
+
+      const { data, error } = await client.auth.verifyOtp({
+        phone: pendingSignup.phone,
+        token: code,
+        type: "sms"
+      });
+
+      if (error || !data?.user) {
+        msg.textContent = "That code didn't match. Please try again.";
+        msg.classList.add("error");
+        return false;
+      }
+
+      currentUser = data.user;
+
+      // Update profile with name/email if missing
+      await client.from("profiles").upsert({
+        id: currentUser.id,
+        name: pendingSignup.name,
+        email: pendingSignup.email,
+        mode: "creator"
+      });
+
+      // Create the trial record — this phone can now never claim again
+      const { data: trial, error: trialError } = await client
+        .from("creator_trials")
+        .insert({
+          profile_id: currentUser.id,
+          name: pendingSignup.name,
+          phone: pendingSignup.phone,
+          email: pendingSignup.email
+        })
+        .select()
+        .single();
+
+      if (trialError) {
+        msg.textContent = "Could not start trial: " + trialError.message;
+        msg.classList.add("error");
+        return false;
+      }
+
+      currentTrial = trial;
+      renderTrialProgress();
+      goTo("screenSubmitTrial");
+      return false;
+    }
+
+    async function handleVideoSubmit(event, isPaid) {
+      event.preventDefault();
+      const prefix = isPaid ? "paid" : "trial";
+      const title = document.getElementById(prefix + "VideoTitle").value.trim();
+      const url = document.getElementById(prefix + "VideoUrl").value.trim();
+      const msg = document.getElementById(prefix + "VideoMessage");
+      msg.textContent = "";
+
+      const youtubeId = extractYouTubeId(url);
+      if (!youtubeId) {
+        msg.textContent = "Please paste a valid YouTube video link.";
+        msg.classList.add("error");
+        return false;
+      }
+
+      const client = window.LexonSupabase?.client();
+      if (!client || !currentUser) return false;
+
+      if (!isPaid && currentTrial && currentTrial.videos_used >= currentTrial.video_limit) {
+        goTo("screenPaywall");
+        return false;
+      }
+
+      const { error } = await client.from("videos").insert({
+        title,
+        video_url: url,
+        thumbnail_url: "https://img.youtube.com/vi/" + youtubeId + "/hqdefault.jpg",
+        creator_name: pendingSignup?.name || currentProfile?.name || "",
+        creator_phone: pendingSignup?.phone || currentTrial?.phone || "",
+        status: "published",
+        is_trial_listing: !isPaid,
+        is_paid_listing: isPaid,
+        created_by: currentUser.id
+      });
+
+      if (error) {
+        msg.textContent = "Could not add video: " + error.message;
+        msg.classList.add("error");
+        return false;
+      }
+
+      if (!isPaid && currentTrial) {
+        const newCount = (currentTrial.videos_used || 0) + 1;
+        await client.from("creator_trials").update({ videos_used: newCount }).eq("id", currentTrial.id);
+        currentTrial.videos_used = newCount;
+      }
+
+      document.getElementById(prefix + "VideoForm").reset();
+      document.getElementById("successMessage").textContent =
+        isPaid ? "Your video is live with full analytics unlocked." : "Your video is live on LEXON AI.";
+      goTo("screenSuccess");
+      return false;
+    }
+
+    window.goTo = goTo;
+    window.handleSignupSubmit = handleSignupSubmit;
+    window.handleOtpSubmit = handleOtpSubmit;
+    window.handleVideoSubmit = handleVideoSubmit;
+
+    init();
+  </script>
+</body>
+</html>

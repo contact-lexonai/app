@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../js/theme.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#635bff">
+  <meta name="description" content="Create your LEXON AI account">
+
+  <title>Create Account — LEXON AI</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/supabase.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script>
+    window.lexonTurnstileToken = null;
+    window.onTurnstileVerified = function (token) {
+      window.lexonTurnstileToken = token;
+    };
+  </script>
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-container">
+
+    <section class="auth-card">
+
+      <a href="../index.html" class="auth-brand" aria-label="LEXON AI Home">
+        <span class="brand-mark"><img src="../assets/logos/lexon-icon.svg" alt="LEXON AI"></span>
+        <span class="brand-name">LEXON AI</span>
+      </a>
+
+      <div class="auth-header">
+        <h1>Create your account</h1>
+        <p>Start learning, discovering and creating with AI.</p>
+      </div>
+
+      <form id="signupForm" class="auth-form" novalidate>
+
+        <div class="form-group">
+          <label for="name">Full name</label>
+
+          <input
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="name"
+            placeholder="Enter your name"
+            maxlength="100"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="password">Password</label>
+
+            <button
+              type="button"
+              class="password-toggle"
+              id="togglePassword"
+              aria-label="Show password"
+            >
+              Show
+            </button>
+          </div>
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="new-password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label for="confirmPassword">Confirm password</label>
+
+            <button
+              type="button"
+              class="password-toggle"
+              id="toggleConfirmPassword"
+              aria-label="Show password"
+            >
+              Show
+            </button>
+          </div>
+
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            autocomplete="new-password"
+            placeholder="Confirm your password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <div
+          id="signupMessage"
+          class="form-message"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <!--
+          Bot protection (Cloudflare Turnstile). To activate:
+            1. Create a free site at https://dash.cloudflare.com/?to=/:account/turnstile
+            2. Replace YOUR_TURNSTILE_SITE_KEY below with your site key.
+            3. In Supabase Dashboard → Authentication → Attack Protection,
+               enable "Turnstile" and paste your Turnstile secret key there.
+          Until a real site key is set, this widget silently does nothing
+          and signup works exactly as before.
+        -->
+        <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-callback="onTurnstileVerified" style="margin: 4px 0;"></div>
+
+        <button
+          type="submit"
+          class="btn btn-primary auth-submit"
+          id="signupButton"
+        >
+          <span id="signupButtonText">Create account</span>
+        </button>
+
+      </form>
+
+      <div class="auth-divider">
+        <span>or</span>
+      </div>
+
+      <p class="auth-footer">
+        Already have an account?
+        <a href="login.html">Sign in</a>
+      </p>
+
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const form = document.getElementById("signupForm");
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const confirmPassword =
+        document.getElementById("confirmPassword");
+
+      const button =
+        document.getElementById("signupButton");
+
+      const buttonText =
+        document.getElementById("signupButtonText");
+
+      const message =
+        document.getElementById("signupMessage");
+
+      const togglePassword =
+        document.getElementById("togglePassword");
+
+      const toggleConfirmPassword =
+        document.getElementById("toggleConfirmPassword");
+
+      function setupPasswordToggle(button, input) {
+        if (!button || !input) return;
+
+        button.addEventListener("click", function () {
+          const hidden = input.type === "password";
+
+          input.type = hidden ? "text" : "password";
+          button.textContent = hidden ? "Hide" : "Show";
+
+          button.setAttribute(
+            "aria-label",
+            hidden ? "Hide password" : "Show password"
+          );
+        });
+      }
+
+      setupPasswordToggle(
+        togglePassword,
+        password
+      );
+
+      setupPasswordToggle(
+        toggleConfirmPassword,
+        confirmPassword
+      );
+
+      if (!form) return;
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        message.textContent = "";
+        message.className = "form-message";
+
+        const nameValue = name.value.trim();
+        const emailValue = email.value.trim();
+        const passwordValue = password.value;
+        const confirmValue = confirmPassword.value;
+
+        if (
+          !nameValue ||
+          !emailValue ||
+          !passwordValue ||
+          !confirmValue
+        ) {
+          message.textContent =
+            "Please fill in all fields.";
+          message.classList.add("error");
+          return;
+        }
+
+        if (passwordValue.length < 6) {
+          message.textContent =
+            "Password must be at least 6 characters.";
+          message.classList.add("error");
+          return;
+        }
+
+        if (passwordValue !== confirmValue) {
+          message.textContent =
+            "Passwords do not match.";
+          message.classList.add("error");
+          return;
+        }
+
+        button.disabled = true;
+        buttonText.textContent = "Creating account...";
+
+        try {
+
+          if (
+            !window.LexonAuth ||
+            typeof window.LexonAuth.signUp !== "function"
+          ) {
+            throw new Error(
+              "Authentication is currently unavailable."
+            );
+          }
+
+          const result =
+            await window.LexonAuth.signUp(
+              emailValue,
+              passwordValue,
+              nameValue,
+              window.lexonTurnstileToken
+            );
+
+          if (!result.success) {
+            if (result.accountExists) {
+              message.innerHTML =
+                'An account with this email already exists. <a href="login.html" style="color:var(--lexon-accent); font-weight:700;">Log in instead</a>';
+              message.classList.add("error");
+              button.disabled = false;
+              buttonText.textContent = "Create account";
+              return;
+            }
+
+            throw new Error(
+              result.error ||
+              "Unable to create your account."
+            );
+          }
+
+          if (result.confirmationRequired) {
+            message.textContent =
+              "Account created. Please check your email to verify your account.";
+
+            message.classList.add("success");
+
+            button.disabled = false;
+            buttonText.textContent =
+              "Account created";
+
+            return;
+          }
+
+          window.location.href =
+            "onboarding.html";
+
+        } catch (error) {
+
+          message.textContent =
+            error.message ||
+            "Something went wrong. Please try again.";
+
+          message.classList.add("error");
+
+          button.disabled = false;
+          buttonText.textContent =
+            "Create account";
+        }
+      });
+
+    });
+  </script>
+
+</body>
+</html>

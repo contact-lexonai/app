@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../js/theme.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#635bff">
+  <meta name="description" content="Edit your LEXON AI profile.">
+
+  <title>Edit Profile — LEXON AI</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="brand" aria-label="LEXON AI Home">
+        <span class="brand-mark"><img src="../assets/logos/lexon-icon.svg" alt="LEXON AI"></span>
+        <span class="brand-name">LEXON AI</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="../index.html">Home</a>
+        <a href="videos.html">Videos</a>
+        <a href="guides.html">Guides</a>
+        <a href="tools.html">Tools</a>
+        <a href="prompts.html">Prompts</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="profile.html" class="icon-button" aria-label="Profile">
+          <i data-lucide="user"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <div class="container">
+
+      <div class="page-header">
+        <div>
+          <a href="profile.html" class="back-link">
+            <i data-lucide="arrow-left"></i>
+            Profile
+          </a>
+
+          <h1>Edit Profile</h1>
+          <p>Update your personal information and preferences.</p>
+        </div>
+      </div>
+
+      <section class="profile-editor">
+
+        <form id="editProfileForm" class="profile-form">
+
+          <div class="profile-avatar-section">
+            <button type="button" class="profile-avatar profile-avatar-tap" id="avatarPreview" aria-label="Change profile photo">
+              <span id="avatarInitial">L</span>
+              <span class="profile-avatar-edit-badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+              </span>
+            </button>
+
+            <div class="avatar-info">
+              <h2>Profile photo</h2>
+              <p>Tap your photo to upload a new one from this device.</p>
+
+              <input type="file" id="avatarFileInput" accept="image/*" hidden>
+              <button type="button" class="btn btn-secondary" id="addPhotoButton">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="4"></rect><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+                Add Photo
+              </button>
+              <span class="field-hint" id="avatarUploadStatus"></span>
+
+              <input type="hidden" id="avatarUrl" name="avatar_url">
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2>Personal information</h2>
+              <p>Keep your profile information up to date.</p>
+            </div>
+
+            <div class="form-grid">
+
+              <div class="form-group">
+                <label class="input-label" for="name">
+                  Full name
+                </label>
+
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-input"
+                  placeholder="Your name"
+                  maxlength="100"
+                  autocomplete="name"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="input-label" for="email">
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-input"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  readonly
+                >
+
+                <span class="field-hint">
+                  Your email is managed by your LEXON AI account.
+                </span>
+              </div>
+
+              <div class="form-group">
+                <label class="input-label" for="lexonId">
+                  LEXON ID
+                </label>
+
+                <input
+                  type="text"
+                  id="lexonId"
+                  class="form-input"
+                  readonly
+                >
+              </div>
+
+              <div class="form-group">
+                <label class="input-label" for="age">
+                  Age
+                </label>
+
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  class="form-input"
+                  min="13"
+                  max="120"
+                  placeholder="Your age"
+                  inputmode="numeric"
+                >
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2>Professional profile</h2>
+              <p>Help LEXON AI personalize your experience.</p>
+            </div>
+
+            <div class="form-grid">
+
+              <div class="form-group">
+                <label class="input-label" for="profession">
+                  What do you do?
+                </label>
+
+                <select
+                  id="profession"
+                  name="profession"
+                  class="form-input"
+                >
+                  <option value="">Select your profession</option>
+                  <option value="Student">Student</option>
+                  <option value="Content Creator">Content Creator</option>
+                  <option value="Freelancer">Freelancer</option>
+                  <option value="Developer">Developer</option>
+                  <option value="Business Owner">Business Owner</option>
+                  <option value="Professional">Professional</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="input-label" for="experience">
+                  Experience level
+                </label>
+
+                <select
+                  id="experience"
+                  name="experience"
+                  class="form-input"
+                >
+                  <option value="">Select experience</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2>Interests</h2>
+              <p>Select topics you want LEXON AI to recommend.</p>
+            </div>
+
+            <div class="interest-grid">
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Basics">
+                <span>AI Basics</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="Prompt Engineering">
+                <span>Prompt Engineering</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Image">
+                <span>AI Image</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Video">
+                <span>AI Video</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Automation">
+                <span>AI Automation</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Coding">
+                <span>AI Coding</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="AI Agents">
+                <span>AI Agents</span>
+              </label>
+
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="Productivity">
+                <span>Productivity</span>
+              </label>
+
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2>Account mode</h2>
+              <p>Choose the workspace that matches what you want to do.</p>
+            </div>
+
+            <div class="mode-grid">
+
+              <label class="mode-option">
+                <input type="radio" name="mode" value="viewer">
+                <span class="mode-card">
+                  <span class="mode-icon">
+                    <i data-lucide="compass"></i>
+                  </span>
+                  <span>
+                    <strong>Viewer</strong>
+                    <small>Discover and learn with AI resources.</small>
+                  </span>
+                </span>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="mode" value="creator">
+                <span class="mode-card">
+                  <span class="mode-icon">
+                    <i data-lucide="pen-tool"></i>
+                  </span>
+                  <span>
+                    <strong>Creator</strong>
+                    <small>Create and share useful AI resources.</small>
+                  </span>
+                </span>
+              </label>
+
+              <label class="mode-option">
+                <input type="radio" name="mode" value="business">
+                <span class="mode-card">
+                  <span class="mode-icon">
+                    <i data-lucide="briefcase-business"></i>
+                  </span>
+                  <span>
+                    <strong>Business</strong>
+                    <small>Use AI resources for your business.</small>
+                  </span>
+                </span>
+              </label>
+
+            </div>
+          </div>
+
+          <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
+          <div class="form-actions">
+            <a href="profile.html" class="button button-secondary">
+              Cancel
+            </a>
+
+            <button type="submit" class="button button-primary" id="saveProfileButton">
+              <i data-lucide="save"></i>
+              <span>Save changes</span>
+            </button>
+          </div>
+
+        </form>
+
+      </section>
+
+    </div>
+  </main>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="../index.html">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+
+    <a href="videos.html">
+      <i data-lucide="play-circle"></i>
+      <span>Videos</span>
+    </a>
+
+    <a href="tools.html">
+      <i data-lucide="wrench"></i>
+      <span>Tools</span>
+    </a>
+
+    <a href="prompts.html">
+      <i data-lucide="sparkles"></i>
+      <span>Prompts</span>
+    </a>
+
+    <a href="profile.html" class="active">
+      <i data-lucide="user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/mode.js"></script>
+
+  <script>
+    const form = document.getElementById("editProfileForm");
+    const message = document.getElementById("formMessage");
+    const saveButton = document.getElementById("saveProfileButton");
+    const avatarPreview = document.getElementById("avatarPreview");
+    const avatarInitial = document.getElementById("avatarInitial");
+    const avatarUrl = document.getElementById("avatarUrl");
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = "form-message " + type;
+    }
+
+    function clearMessage() {
+      message.textContent = "";
+      message.className = "form-message";
+    }
+
+    function updateAvatar(name, url) {
+      avatarPreview.innerHTML = "";
+
+      if (url) {
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "Profile avatar";
+
+        image.onerror = () => {
+          avatarPreview.innerHTML = "";
+          const fallback = document.createElement("span");
+          fallback.textContent = (name || "L").trim().charAt(0).toUpperCase();
+          avatarPreview.appendChild(fallback);
+        };
+
+        avatarPreview.appendChild(image);
+        return;
+      }
+
+      const fallback = document.createElement("span");
+      fallback.textContent = (name || "L").trim().charAt(0).toUpperCase();
+      avatarPreview.appendChild(fallback);
+    }
+
+    function setFormValues(profile, user) {
+      const name = profile?.name || user?.user_metadata?.name || "";
+      const email = user?.email || profile?.email || "";
+
+      document.getElementById("name").value = name;
+      document.getElementById("email").value = email;
+      document.getElementById("lexonId").value = profile?.lexon_id || "";
+      document.getElementById("age").value = profile?.age ?? "";
+      document.getElementById("profession").value = profile?.profession || "";
+      document.getElementById("experience").value = profile?.experience || "";
+      document.getElementById("avatarUrl").value = profile?.avatar_url || "";
+
+      const interests = Array.isArray(profile?.interests)
+        ? profile.interests
+        : [];
+
+      document.querySelectorAll('input[name="interests"]').forEach(input => {
+        input.checked = interests.includes(input.value);
+      });
+
+      const selectedMode = profile?.mode || "viewer";
+
+      document.querySelectorAll('input[name="mode"]').forEach(input => {
+        input.checked = input.value === selectedMode;
+      });
+
+      updateAvatar(name, profile?.avatar_url || "");
+    }
+
+    async function loadProfile() {
+      try {
+        if (!window.LexonAuth || !window.LexonAuth.getUser) {
+          throw new Error("Authentication is unavailable.");
+        }
+
+        currentUser = await window.LexonAuth.getUser();
+
+        if (!currentUser) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        if (!window.LexonAuth.getProfile) {
+          throw new Error("Profile service is unavailable.");
+        }
+
+        currentProfile = await window.LexonAuth.getProfile(currentUser.id);
+
+        if (!currentProfile) {
+          currentProfile = {
+            name: currentUser.user_metadata?.name || "",
+            email: currentUser.email || "",
+            interests: [],
+            mode: "viewer"
+          };
+        }
+
+        setFormValues(currentProfile, currentUser);
+
+      } catch (error) {
+        console.error(error);
+        showMessage(error.message || "Unable to load your profile.");
+      }
+    }
+
+    const addPhotoButton = document.getElementById("addPhotoButton");
+    const avatarFileInput = document.getElementById("avatarFileInput");
+    const avatarUploadStatus = document.getElementById("avatarUploadStatus");
+
+    function openPhotoPicker() {
+      avatarFileInput.click();
+    }
+
+    addPhotoButton.addEventListener("click", openPhotoPicker);
+    avatarPreview.addEventListener("click", openPhotoPicker);
+
+    avatarFileInput.addEventListener("change", async () => {
+      const file = avatarFileInput.files?.[0];
+      if (!file) return;
+
+      if (!currentUser) {
+        avatarUploadStatus.textContent = "Please wait for your profile to finish loading.";
+        return;
+      }
+
+      // Instant local preview while the upload happens
+      const localPreviewUrl = URL.createObjectURL(file);
+      updateAvatar(document.getElementById("name").value, localPreviewUrl);
+
+      avatarUploadStatus.textContent = "Uploading…";
+      addPhotoButton.disabled = true;
+
+      try {
+        const client = window.LexonSupabase?.client();
+        const extension = file.name.split(".").pop() || "jpg";
+        const path = currentUser.id + "/avatar-" + Date.now() + "." + extension;
+
+        const { error: uploadError } = await client.storage
+          .from("avatars")
+          .upload(path, file, { upsert: true, cacheControl: "3600" });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = client.storage.from("avatars").getPublicUrl(path);
+        const publicUrl = publicUrlData?.publicUrl;
+
+        avatarUrl.value = publicUrl || "";
+        updateAvatar(document.getElementById("name").value, publicUrl || "");
+        avatarUploadStatus.textContent = "Photo updated. Don't forget to save.";
+      } catch (error) {
+        console.error(error);
+        avatarUploadStatus.textContent =
+          "Couldn't upload photo. Make sure an 'avatars' storage bucket exists in Supabase.";
+      } finally {
+        addPhotoButton.disabled = false;
+      }
+    });
+
+    document.getElementById("name").addEventListener("input", () => {
+      const name = document.getElementById("name").value;
+      updateAvatar(name, avatarUrl.value.trim());
+    });
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage();
+
+      if (!currentUser) {
+        showMessage("Your session has expired. Please log in again.");
+        return;
+      }
+
+      const name = document.getElementById("name").value.trim();
+      const ageValue = document.getElementById("age").value.trim();
+      const profession = document.getElementById("profession").value;
+      const experience = document.getElementById("experience").value;
+      const avatar = avatarUrl.value.trim();
+
+      const interests = Array.from(
+        document.querySelectorAll('input[name="interests"]:checked')
+      ).map(input => input.value);
+
+      const selectedMode = document.querySelector(
+        'input[name="mode"]:checked'
+      )?.value || "viewer";
+
+      if (!name) {
+        showMessage("Please enter your name.");
+        return;
+      }
+
+      if (ageValue) {
+        const age = Number(ageValue);
+
+        if (!Number.isInteger(age) || age < 13 || age > 120) {
+          showMessage("Please enter a valid age.");
+          return;
+        }
+      }
+
+      saveButton.disabled = true;
+      saveButton.classList.add("loading");
+
+      const originalContent = saveButton.innerHTML;
+
+      saveButton.innerHTML = `
+        <i data-lucide="loader-circle"></i>
+        <span>Saving...</span>
+      `;
+
+      lucide.createIcons();
+
+      try {
+        const profileData = {
+          name,
+          profession: profession || null,
+          experience: experience || null,
+          age: ageValue ? Number(ageValue) : null,
+          interests,
+          avatar_url: avatar || null,
+          mode: selectedMode,
+          updated_at: new Date().toISOString()
+        };
+
+        const { data, error } = await window.LexonSupabase.client()
+          .from("profiles")
+          .update(profileData)
+          .eq("id", currentUser.id)
+          .select()
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        currentProfile = data;
+
+        localStorage.setItem(
+          "lexon_profile",
+          JSON.stringify(currentProfile)
+        );
+
+        localStorage.setItem(
+          "lexon_mode",
+          selectedMode
+        );
+
+        showMessage("Profile updated successfully.", "success");
+
+        updateAvatar(name, avatar);
+
+        setTimeout(() => {
+          window.location.href = "profile.html";
+        }, 700);
+
+      } catch (error) {
+        console.error(error);
+
+        saveButton.disabled = false;
+        saveButton.classList.remove("loading");
+        saveButton.innerHTML = originalContent;
+        lucide.createIcons();
+
+        showMessage(
+          error.message || "Unable to update your profile. Please try again."
+        );
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      loadProfile();
+    });
+  </script>
+
+  <style>
+    .profile-page {
+      padding: 40px 0 120px;
+      min-height: calc(100vh - 72px);
+      background: var(--lexon-surface);
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .page-header p {
+      margin: 0;
+      color: #667085;
+      font-size: 15px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--lexon-accent);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .back-link svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .profile-editor {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .profile-form {
+      border: 1px solid #e7e8ec;
+      border-radius: 20px;
+      background: var(--lexon-surface);
+      box-shadow: 0 10px 35px rgba(16, 24, 40, 0.06);
+      overflow: hidden;
+    }
+
+    .profile-avatar-section,
+    .form-section {
+      padding: 28px;
+      border-bottom: 1px solid #eaecf0;
+    }
+
+    .profile-avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .profile-avatar {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      flex: 0 0 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      background: #f0efff;
+      color: var(--lexon-accent);
+      font-size: 30px;
+      font-weight: 700;
+      border: 1px solid #dfddff;
+    }
+
+    .profile-avatar-tap {
+      cursor: pointer;
+      transition: opacity 160ms ease;
+    }
+
+    .profile-avatar-tap:hover {
+      opacity: 0.85;
+    }
+
+    .profile-avatar-edit-badge {
+      position: absolute;
+      right: -2px;
+      bottom: -2px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--lexon-accent, #635bff);
+      color: var(--lexon-surface);
+      border: 2px solid #fff;
+    }
+
+    .profile-avatar-edit-badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .avatar-info h2,
+    .form-section-header h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: var(--lexon-text);
+    }
+
+    .avatar-info p,
+    .form-section-header p {
+      margin: 0 0 18px;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .form-section-header {
+      margin-bottom: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .form-group {
+      min-width: 0;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      min-height: 46px;
+      box-sizing: border-box;
+      padding: 11px 13px;
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      outline: none;
+      background: var(--lexon-surface);
+      color: var(--lexon-text);
+      font: inherit;
+      font-size: 14px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--lexon-accent);
+      box-shadow: 0 0 0 3px rgba(99, 91, 255, .12);
+    }
+
+    .form-input[readonly] {
+      background: #f9fafb;
+      color: #667085;
+      cursor: not-allowed;
+    }
+
+    .field-hint {
+      display: block;
+      margin-top: 7px;
+      color: #98a2b3;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .interest-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .interest-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .interest-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .interest-option span {
+      display: flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+      color: #344054;
+      background: var(--lexon-surface);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all .2s ease;
+    }
+
+    .interest-option:hover span {
+      border-color: #b7b3ff;
+    }
+
+    .interest-option input:checked + span {
+      border-color: var(--lexon-accent);
+      background: #f4f3ff;
+      color: #4b43d4;
+      box-shadow: 0 0 0 1px #635bff;
+    }
+
+    .interest-option input:focus-visible + span {
+      box-shadow: 0 0 0 3px rgba(99, 91, 255, .15);
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mode-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .mode-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode-card {
+      min-height: 128px;
+      padding: 17px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border: 1px solid #e4e7ec;
+      border-radius: 13px;
+      background: var(--lexon-surface);
+      transition: all .2s ease;
+    }
+
+    .mode-option:hover .mode-card {
+      border-color: #b7b3ff;
+    }
+
+    .mode-option input:checked + .mode-card {
+      border-color: var(--lexon-accent);
+      background: #f7f6ff;
+      box-shadow: 0 0 0 1px #635bff;
+    }
+
+    .mode-option input:focus-visible + .mode-card {
+      box-shadow: 0 0 0 3px rgba(99, 91, 255, .15);
+    }
+
+    .mode-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      background: #f2f4f7;
+      color: #475467;
+    }
+
+    .mode-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .mode-option input:checked + .mode-card .mode-icon {
+      background: #e9e7ff;
+      color: var(--lexon-accent);
+    }
+
+    .mode-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--lexon-text);
+      font-size: 14px;
+    }
+
+    .mode-card small {
+      display: block;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .form-message {
+      min-height: 20px;
+      padding: 0 28px;
+      color: #d92d20;
+      font-size: 13px;
+    }
+
+    .form-message.success {
+      color: #027a48;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 22px 28px;
+      background: #fcfcfd;
+    }
+
+    .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 17px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .button-primary {
+      background: var(--lexon-accent);
+      color: var(--lexon-surface);
+    }
+
+    .button-primary:hover {
+      background: #554ce8;
+    }
+
+    .button-primary:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .button-secondary {
+      border-color: #d0d5dd;
+      background: var(--lexon-surface);
+      color: #344054;
+    }
+
+    .button-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .loading svg {
+      animation: profileSpin 1s linear infinite;
+    }
+
+    @keyframes profileSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .profile-page {
+        padding: 28px 0 105px;
+      }
+
+      .profile-form {
+        border-radius: 16px;
+      }
+
+      .profile-avatar-section,
+      .form-section {
+        padding: 22px 18px;
+      }
+
+      .profile-avatar-section {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .form-grid,
+      .interest-grid,
+      .mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mode-card {
+        min-height: auto;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .form-message {
+        padding: 0 18px;
+      }
+
+      .form-actions {
+        padding: 18px;
+      }
+
+      .form-actions .button {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .profile-avatar-section {
+        gap: 16px;
+      }
+
+      .profile-avatar {
+        width: 72px;
+        height: 72px;
+        flex-basis: 72px;
+        font-size: 25px;
+      }
+
+      .form-actions {
+        flex-direction: column-reverse;
+      }
+
+      .form-actions .button {
+        width: 100%;
+      }
+    }
+  </style>
+
+</body>
+</html>

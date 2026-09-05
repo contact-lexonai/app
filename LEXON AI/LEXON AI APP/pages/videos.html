@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../js/theme.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Discover AI tutorials and practical videos on LEXON AI">
+
+  <title>Videos — LEXON AI</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" href="../assets/logos/lexon-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    .videos-page {
+      min-height: 100vh;
+      background: var(--lexon-surface);
+    }
+
+    .videos-main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 110px;
+    }
+
+    .videos-heading {
+      margin-bottom: 28px;
+    }
+
+    .videos-heading h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      color: var(--lexon-text);
+    }
+
+    .videos-heading p {
+      margin: 0;
+      color: var(--lexon-text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 620px;
+    }
+
+    .video-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .video-search {
+      position: relative;
+      flex: 1 1 320px;
+    }
+
+    .video-search svg {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--lexon-text-muted);
+      pointer-events: none;
+    }
+
+    .video-search input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 0 16px 0 44px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--lexon-text);
+      background: var(--lexon-surface);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      box-sizing: border-box;
+    }
+
+    .video-search input:focus {
+      border-color: var(--lexon-accent);
+      box-shadow: 0 0 0 3px rgba(99, 91, 255, .10);
+    }
+
+    .video-filter {
+      height: 48px;
+      min-width: 190px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 0 40px 0 14px;
+      background: var(--lexon-surface);
+      color: #374151;
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .video-filter:focus {
+      border-color: var(--lexon-accent);
+      box-shadow: 0 0 0 3px rgba(99, 91, 255, .10);
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .video-card {
+      overflow: hidden;
+      border: 1px solid #e8e9ee;
+      border-radius: 16px;
+      background: var(--lexon-surface);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-2px);
+      border-color: #dddde5;
+      box-shadow: 0 10px 30px rgba(17, 24, 39, .07);
+    }
+
+    .video-thumbnail {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8fb;
+      color: var(--lexon-accent);
+    }
+
+    .video-placeholder svg {
+      width: 42px;
+      height: 42px;
+      stroke-width: 1.7;
+    }
+
+    .video-play {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--lexon-surface);
+      color: var(--lexon-accent);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, .14);
+    }
+
+    .video-play svg {
+      width: 18px;
+      height: 18px;
+      margin-left: 2px;
+    }
+
+    .video-content {
+      padding: 18px;
+    }
+
+    .video-category {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #f2f1ff;
+      color: #554dcc;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 11px;
+    }
+
+    .video-title {
+      margin: 0 0 8px;
+      color: var(--lexon-text);
+      font-size: 16px;
+      line-height: 1.4;
+      font-weight: 650;
+      letter-spacing: -.01em;
+    }
+
+    .video-description {
+      margin: 0 0 16px;
+      color: var(--lexon-text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #f0f0f3;
+    }
+
+    .video-meta {
+      color: #8a8f9b;
+      font-size: 12px;
+    }
+
+    .watch-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--lexon-accent);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .watch-link:hover {
+      text-decoration: underline;
+    }
+
+    .watch-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .video-empty {
+      display: none;
+      text-align: center;
+      padding: 72px 20px;
+      border: 1px dashed #dfe1e7;
+      border-radius: 16px;
+      background: #fafafa;
+    }
+
+    .video-empty.visible {
+      display: block;
+    }
+
+    .video-empty-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #f2f1ff;
+      color: var(--lexon-accent);
+    }
+
+    .video-empty-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .video-empty h2 {
+      margin: 0 0 7px;
+      font-size: 18px;
+      color: var(--lexon-text);
+    }
+
+    .video-empty p {
+      margin: 0 auto;
+      max-width: 440px;
+      color: var(--lexon-text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .video-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      color: var(--lexon-text-secondary);
+      font-size: 14px;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+
+    .video-error {
+      padding: 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      color: var(--lexon-text-secondary);
+      background: #fafafa;
+      font-size: 14px;
+      line-height: 1.5;
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .videos-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .videos-main {
+        width: min(100% - 24px, 1180px);
+        padding-top: 28px;
+      }
+
+      .video-toolbar {
+        display: block;
+      }
+
+      .video-search {
+        margin-bottom: 10px;
+      }
+
+      .video-filter {
+        width: 100%;
+      }
+
+      .videos-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .video-card:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="videos-page">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="brand" aria-label="LEXON AI Home">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="../assets/logos/lexon-icon.svg" alt="">
+        </span>
+        <span class="brand-name">LEXON AI</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="../index.html">Home</a>
+        <a href="videos.html" class="active">Videos</a>
+        <a href="courses.html">Courses</a>
+        <a href="tools.html">Tools</a>
+        <a href="guides.html">Guides</a>
+      </nav>
+
+      <div class="header-actions">
+        <button
+          type="button"
+          class="icon-button"
+          id="notificationButton"
+          aria-label="Notifications"
+          title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </button>
+
+        <a href="profile.html" class="header-avatar" id="headerAvatar" aria-label="Profile">?</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="videos-main">
+
+    <section class="videos-heading">
+      <h1>Learn with videos</h1>
+      <p>
+        Practical AI tutorials, workflows, and ideas to help you learn faster and create with AI.
+      </p>
+    </section>
+
+    <section class="video-toolbar" aria-label="Video filters">
+      <div class="video-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
+
+        <input
+          type="search"
+          id="videoSearch"
+          placeholder="Search videos..."
+          autocomplete="off"
+          aria-label="Search videos">
+      </div>
+
+      <select id="videoCategory" class="video-filter" aria-label="Filter videos by category">
+        <option value="">All categories</option>
+        <option value="AI Basics">AI Basics</option>
+        <option value="Prompt Engineering">Prompt Engineering</option>
+        <option value="AI Image">AI Image</option>
+        <option value="AI Video">AI Video</option>
+        <option value="AI Automation">AI Automation</option>
+        <option value="AI Coding">AI Coding</option>
+        <option value="AI Agents">AI Agents</option>
+        <option value="Productivity">Productivity</option>
+      </select>
+    </section>
+
+    <section
+      id="videosGrid"
+      class="videos-grid"
+      aria-live="polite"
+      aria-busy="true">
+      <div class="video-status">Loading videos...</div>
+    </section>
+
+    <div id="videoEmpty" class="video-empty">
+      <div class="video-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </div>
+      <h2 id="emptyTitle">No videos found</h2>
+      <p id="emptyText">
+        Try a different search or category. Published videos will appear here when available.
+      </p>
+    </div>
+
+  </main>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="../index.html">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m3 10 9-7 9 7"></path>
+          <path d="M5 9v11h14V9"></path>
+          <path d="M9 20v-6h6v6"></path>
+        </svg>
+      </span>
+      <span>Home</span>
+    </a>
+
+    <a href="videos.html" class="active" aria-current="page">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <polygon points="10 9 16 12 10 15 10 9"></polygon>
+        </svg>
+      </span>
+      <span>Videos</span>
+    </a>
+
+    <a href="courses.html">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m3 7 9-4 9 4-9 4-9-4Z"></path>
+          <path d="M7 9.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3V9.5"></path>
+          <path d="M21 7v7"></path>
+        </svg>
+      </span>
+      <span>Courses</span>
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V20h-2.4v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H6v-2.4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9L7.3 8.6 9 6.9l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5V5h2.4v.8a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2V14h-.2a1.7 1.7 0 0 0-1.5 1Z"></path>
+        </svg>
+      </span>
+      <span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="video-player-modal" id="videoPlayerModal">
+    <div class="video-player-backdrop" onclick="closeVideoModal()"></div>
+    <div class="video-player-box">
+      <div class="video-player-bar">
+        <span id="videoPlayerTitle"></span>
+        <button type="button" class="video-player-close" onclick="closeVideoModal()" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="video-player-frame" id="videoPlayerFrameWrap"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+
+  <script>
+    const videosGrid = document.getElementById("videosGrid");
+    const videoEmpty = document.getElementById("videoEmpty");
+    const emptyTitle = document.getElementById("emptyTitle");
+    const emptyText = document.getElementById("emptyText");
+    const videoSearch = document.getElementById("videoSearch");
+    const videoCategory = document.getElementById("videoCategory");
+    const headerAvatar = document.getElementById("headerAvatar");
+    const notificationButton = document.getElementById("notificationButton");
+
+    let videos = [];
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getVideoValue(video, keys) {
+      for (const key of keys) {
+        if (video && video[key] !== undefined && video[key] !== null && String(video[key]).trim()) {
+          return String(video[key]).trim();
+        }
+      }
+      return "";
+    }
+
+    function getVideoUrl(video) {
+      return getVideoValue(video, [
+        "video_url",
+        "url",
+        "youtube_url",
+        "youtube_link",
+        "watch_url",
+        "link"
+      ]);
+    }
+
+    function getThumbnail(video) {
+      return getVideoValue(video, [
+        "thumbnail_url",
+        "thumbnail",
+        "image_url",
+        "cover_url"
+      ]);
+    }
+
+    function getTitle(video) {
+      return getVideoValue(video, [
+        "title",
+        "name"
+      ]) || "Untitled video";
+    }
+
+    function getDescription(video) {
+      return getVideoValue(video, [
+        "description",
+        "summary",
+        "excerpt"
+      ]);
+    }
+
+    function getCategory(video) {
+      return getVideoValue(video, [
+        "category",
+        "topic",
+        "type"
+      ]) || "AI";
+    }
+
+    function getDuration(video) {
+      return getVideoValue(video, [
+        "duration",
+        "video_duration"
+      ]);
+    }
+
+    function getDate(video) {
+      const value = getVideoValue(video, [
+        "created_at",
+        "published_at"
+      ]);
+
+      if (!value) return "";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+      return date.toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function getYouTubeId(url) {
+      try {
+        const parsed = new URL(url);
+
+        if (
+          parsed.hostname.includes("youtube.com") ||
+          parsed.hostname.includes("youtu.be")
+        ) {
+          let id = "";
+
+          if (parsed.hostname.includes("youtu.be")) {
+            id = parsed.pathname.replace("/", "").split("/")[0];
+          }
+
+          if (!id) {
+            id = parsed.searchParams.get("v") || "";
+          }
+
+          if (!id && parsed.pathname.startsWith("/shorts/")) {
+            id = parsed.pathname.split("/")[2] || "";
+          }
+
+          if (!id && parsed.pathname.startsWith("/embed/")) {
+            id = parsed.pathname.split("/")[2] || "";
+          }
+
+          return id || "";
+        }
+      } catch (error) {
+        return "";
+      }
+
+      return "";
+    }
+
+    function getYouTubeThumbnail(url) {
+      const id = getYouTubeId(url);
+      return id ? "https://img.youtube.com/vi/" + encodeURIComponent(id) + "/hqdefault.jpg" : "";
+    }
+
+    function openVideoModal(url, title) {
+      const id = getYouTubeId(url);
+      const modal = document.getElementById("videoPlayerModal");
+      const frameWrap = document.getElementById("videoPlayerFrameWrap");
+      const titleEl = document.getElementById("videoPlayerTitle");
+
+      if (!modal || !frameWrap) return;
+
+      if (id) {
+        frameWrap.innerHTML =
+          '<iframe src="https://www.youtube.com/embed/' + encodeURIComponent(id) +
+          '?autoplay=1&rel=0" title="' + escapeHTML(title || "Video") +
+          '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      } else {
+        window.open(url, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      titleEl.textContent = title || "";
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById("videoPlayerModal");
+      const frameWrap = document.getElementById("videoPlayerFrameWrap");
+
+      if (modal) modal.classList.remove("open");
+      if (frameWrap) frameWrap.innerHTML = "";
+      document.body.style.overflow = "";
+    }
+
+    window.openVideoModal = openVideoModal;
+    window.closeVideoModal = closeVideoModal;
+
+    function renderThumbnail(video) {
+      const storedThumbnail = getThumbnail(video);
+      const videoUrl = getVideoUrl(video);
+      const thumbnail = storedThumbnail || getYouTubeThumbnail(videoUrl);
+
+      if (thumbnail) {
+        return `
+          <img
+            src="${escapeHTML(thumbnail)}"
+            alt=""
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="video-placeholder" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <polygon points="10 9 16 12 10 15 10 9"></polygon>
+            </svg>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+            <polygon points="10 9 16 12 10 15 10 9"></polygon>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderVideos(items) {
+      videosGrid.innerHTML = "";
+
+      if (!items.length) {
+        videosGrid.setAttribute("aria-busy", "false");
+        videoEmpty.classList.add("visible");
+
+        if (videos.length) {
+          emptyTitle.textContent = "No matching videos";
+          emptyText.textContent = "Try another search term or choose a different category.";
+        } else {
+          emptyTitle.textContent = "No videos available";
+          emptyText.textContent = "Published videos will appear here when they are added.";
+        }
+
+        return;
+      }
+
+      videoEmpty.classList.remove("visible");
+
+      videosGrid.innerHTML = items.map(video => {
+        const title = getTitle(video);
+        const description = getDescription(video);
+        const category = getCategory(video);
+        const duration = getDuration(video);
+        const date = getDate(video);
+        const url = getVideoUrl(video);
+
+        const meta = duration || date || "Video";
+
+        return `
+          <article class="video-card">
+            <div class="video-thumbnail">
+              ${renderThumbnail(video)}
+
+              ${
+                url
+                  ? `
+                    <button
+                      type="button"
+                      class="video-play"
+                      onclick="openVideoModal('${escapeHTML(url).replace(/'/g, "\\'")}', '${escapeHTML(title).replace(/'/g, "\\'")}')"
+                      aria-label="Watch ${escapeHTML(title)}">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10-6.8a1.1 1.1 0 0 0 0-1.8l-10-6.8C8.9 3.9 8 4.4 8 5.2Z"></path>
+                      </svg>
+                    </button>
+                  `
+                  : ""
+              }
+            </div>
+
+            <div class="video-content">
+              <span class="video-category">${escapeHTML(category)}</span>
+
+              <h2 class="video-title">${escapeHTML(title)}</h2>
+
+              ${
+                description
+                  ? `<p class="video-description">${escapeHTML(description)}</p>`
+                  : ""
+              }
+
+              <div class="video-footer">
+                <span class="video-meta">${escapeHTML(meta)}</span>
+
+                ${
+                  url
+                    ? `
+                      <button
+                        type="button"
+                        class="watch-link"
+                        onclick="openVideoModal('${escapeHTML(url).replace(/'/g, "\\'")}', '${escapeHTML(title).replace(/'/g, "\\'")}')">
+                        Watch video
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M5 12h14"></path>
+                          <path d="m13 6 6 6-6 6"></path>
+                        </svg>
+                      </button>
+                    `
+                    : ""
+                }
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      videosGrid.setAttribute("aria-busy", "false");
+    }
+
+    function applyFilters() {
+      const query = videoSearch.value.trim().toLowerCase();
+      const category = videoCategory.value.trim().toLowerCase();
+
+      const filtered = videos.filter(video => {
+        const title = getTitle(video).toLowerCase();
+        const description = getDescription(video).toLowerCase();
+        const videoCategoryValue = getCategory(video).toLowerCase();
+
+        const matchesSearch =
+          !query ||
+          title.includes(query) ||
+          description.includes(query) ||
+          videoCategoryValue.includes(query);
+
+        const matchesCategory =
+          !category ||
+          videoCategoryValue === category;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      renderVideos(filtered);
+    }
+
+    async function loadProfile() {
+      try {
+        const client = window.LexonSupabase?.client();
+
+        if (!client) return;
+
+        const { data } = await client.auth.getUser();
+
+        const user = data?.user;
+
+        if (!user) return;
+
+        const { data: profile } = await client
+          .from("profiles")
+          .select("name, avatar_url")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profile?.avatar_url) {
+          headerAvatar.innerHTML = `
+            <img
+              src="${escapeHTML(profile.avatar_url)}"
+              alt=""
+              style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">
+          `;
+        } else if (profile?.name) {
+          headerAvatar.textContent = profile.name.trim().charAt(0).toUpperCase();
+        }
+      } catch (error) {
+        headerAvatar.textContent = "U";
+      }
+    }
+
+    async function loadVideos() {
+      try {
+        const client = window.LexonSupabase?.client();
+
+        if (!client) {
+          videosGrid.innerHTML = `
+            <div class="video-error">
+              Video content is not connected yet. Published videos will appear here after the database connection is configured.
+            </div>
+          `;
+          videosGrid.setAttribute("aria-busy", "false");
+          return;
+        }
+
+        const { data, error } = await client
+          .from("videos")
+          .select("*")
+          .eq("status", "published")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          videosGrid.innerHTML = `
+            <div class="video-error">
+              Videos could not be loaded right now. Please try again later.
+            </div>
+          `;
+          videosGrid.setAttribute("aria-busy", "false");
+          return;
+        }
+
+        videos = Array.isArray(data) ? data : [];
+        applyFilters();
+      } catch (error) {
+        videosGrid.innerHTML = `
+          <div class="video-error">
+            Videos could not be loaded right now. Please try again later.
+          </div>
+        `;
+        videosGrid.setAttribute("aria-busy", "false");
+      }
+    }
+
+    function readSearchQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const query = params.get("search");
+
+      if (query) {
+        videoSearch.value = query;
+      }
+    }
+
+    videoSearch.addEventListener("input", applyFilters);
+    videoCategory.addEventListener("change", applyFilters);
+
+    readSearchQuery();
+    loadProfile();
+    loadVideos();
+  </script>
+
+  <script src="../js/notifications.js"></script>
+</body>
+</html>

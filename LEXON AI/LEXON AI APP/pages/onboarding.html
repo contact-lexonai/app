@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../js/theme.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#635bff">
+  <meta name="description" content="Set up your LEXON AI profile">
+
+  <title>Get Started — LEXON AI</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="../style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="../js/supabase.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/mode.js" defer></script>
+</head>
+
+<body class="auth-page onboarding-page">
+
+  <main class="onboarding-container">
+
+    <section class="onboarding-card">
+
+      <a href="../index.html" class="auth-brand" aria-label="LEXON AI Home">
+        <span class="brand-mark"><img src="../assets/logos/lexon-icon.svg" alt="LEXON AI"></span>
+        <span class="brand-name">LEXON AI</span>
+      </a>
+
+      <div class="onboarding-progress">
+        <div class="progress-track">
+          <span id="progressBar"></span>
+        </div>
+
+        <span id="stepCounter">Step 1 of 5</span>
+      </div>
+
+      <form id="onboardingForm" novalidate>
+
+        <section class="onboarding-step active" data-step="1">
+          <div class="auth-header">
+            <h1>What do you want to learn?</h1>
+            <p>Select the topics you're interested in.</p>
+          </div>
+
+          <div class="selection-grid">
+
+            <button type="button" class="selection-card" data-interest="AI Basics">
+              <span>AI Basics</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="Prompt Engineering">
+              <span>Prompt Engineering</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="AI Image">
+              <span>AI Image</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="AI Video">
+              <span>AI Video</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="AI Automation">
+              <span>AI Automation</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="AI Coding">
+              <span>AI Coding</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="AI Agents">
+              <span>AI Agents</span>
+            </button>
+
+            <button type="button" class="selection-card" data-interest="Productivity">
+              <span>Productivity</span>
+            </button>
+
+          </div>
+
+          <p class="selection-hint" id="interestError"></p>
+        </section>
+
+        <section class="onboarding-step" data-step="2">
+          <div class="auth-header">
+            <h1>What do you do?</h1>
+            <p>Choose the option that best describes you.</p>
+          </div>
+
+          <div class="selection-list">
+
+            <button type="button" class="selection-card" data-profession="Student">
+              <span>Student</span>
+            </button>
+
+            <button type="button" class="selection-card" data-profession="Content Creator">
+              <span>Content Creator</span>
+            </button>
+
+            <button type="button" class="selection-card" data-profession="Freelancer">
+              <span>Freelancer</span>
+            </button>
+
+            <button type="button" class="selection-card" data-profession="Developer">
+              <span>Developer</span>
+            </button>
+
+            <button type="button" class="selection-card" data-profession="Business Owner">
+              <span>Business Owner</span>
+            </button>
+
+            <button type="button" class="selection-card" data-profession="Professional">
+              <span>Professional</span>
+            </button>
+
+          </div>
+
+          <p class="selection-hint" id="professionError"></p>
+        </section>
+
+        <section class="onboarding-step" data-step="3">
+          <div class="auth-header">
+            <h1>What's your AI experience?</h1>
+            <p>We'll use this to personalize your experience.</p>
+          </div>
+
+          <div class="selection-list">
+
+            <button type="button" class="selection-card" data-experience="beginner">
+              <span>Beginner</span>
+            </button>
+
+            <button type="button" class="selection-card" data-experience="intermediate">
+              <span>Intermediate</span>
+            </button>
+
+            <button type="button" class="selection-card" data-experience="advanced">
+              <span>Advanced</span>
+            </button>
+
+          </div>
+
+          <p class="selection-hint" id="experienceError"></p>
+        </section>
+
+        <section class="onboarding-step" data-step="4">
+          <div class="auth-header">
+            <h1>How old are you?</h1>
+            <p>This helps us personalize recommendations.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Age</label>
+
+            <input
+              type="number"
+              id="age"
+              name="age"
+              min="13"
+              max="120"
+              inputmode="numeric"
+              autocomplete="off"
+              placeholder="Enter your age"
+              required
+            >
+          </div>
+
+          <p class="selection-hint" id="ageError"></p>
+        </section>
+
+        <section class="onboarding-step" data-step="5">
+          <div class="auth-header">
+            <h1>Choose your mode</h1>
+            <p>You can change your mode later without losing your data.</p>
+          </div>
+
+          <div class="selection-list">
+
+            <button type="button" class="selection-card" data-mode="viewer">
+              <span>Viewer</span>
+            </button>
+
+            <button type="button" class="selection-card" data-mode="creator">
+              <span>Creator</span>
+            </button>
+
+            <button type="button" class="selection-card" data-mode="business">
+              <span>Business</span>
+            </button>
+
+          </div>
+
+          <p class="selection-hint" id="modeError"></p>
+        </section>
+
+        <div
+          id="onboardingMessage"
+          class="form-message"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <div class="onboarding-actions">
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="backButton"
+          >
+            Back
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="nextButton"
+          >
+            Continue
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const form =
+        document.getElementById("onboardingForm");
+
+      const steps =
+        document.querySelectorAll(".onboarding-step");
+
+      const nextButton =
+        document.getElementById("nextButton");
+
+      const backButton =
+        document.getElementById("backButton");
+
+      const progressBar =
+        document.getElementById("progressBar");
+
+      const stepCounter =
+        document.getElementById("stepCounter");
+
+      const message =
+        document.getElementById("onboardingMessage");
+
+      const ageInput =
+        document.getElementById("age");
+
+      let currentStep = 1;
+
+      const totalSteps = 5;
+
+      const data = {
+        interests: [],
+        profession: "",
+        experience: "",
+        age: "",
+        mode: ""
+      };
+
+      function showStep(step) {
+
+        steps.forEach(function (element) {
+          const number =
+            Number(element.dataset.step);
+
+          element.classList.toggle(
+            "active",
+            number === step
+          );
+        });
+
+        const progress =
+          (step / totalSteps) * 100;
+
+        progressBar.style.width =
+          progress + "%";
+
+        stepCounter.textContent =
+          "Step " + step + " of " + totalSteps;
+
+        backButton.style.visibility =
+          step === 1 ? "hidden" : "visible";
+
+        nextButton.textContent =
+          step === totalSteps
+            ? "Finish"
+            : "Continue";
+
+        message.textContent = "";
+        message.className = "form-message";
+
+        currentStep = step;
+      }
+
+      function clearErrors() {
+        document
+          .querySelectorAll(".selection-hint")
+          .forEach(function (element) {
+            element.textContent = "";
+          });
+      }
+
+      function validateStep() {
+
+        clearErrors();
+
+        if (currentStep === 1) {
+          if (!data.interests.length) {
+            document.getElementById(
+              "interestError"
+            ).textContent =
+              "Select at least one topic.";
+
+            return false;
+          }
+        }
+
+        if (currentStep === 2) {
+          if (!data.profession) {
+            document.getElementById(
+              "professionError"
+            ).textContent =
+              "Select one option.";
+
+            return false;
+          }
+        }
+
+        if (currentStep === 3) {
+          if (!data.experience) {
+            document.getElementById(
+              "experienceError"
+            ).textContent =
+              "Select your experience level.";
+
+            return false;
+          }
+        }
+
+        if (currentStep === 4) {
+          const age =
+            Number(ageInput.value);
+
+          if (
+            !age ||
+            age < 13 ||
+            age > 120
+          ) {
+            document.getElementById(
+              "ageError"
+            ).textContent =
+              "Enter a valid age.";
+
+            return false;
+          }
+
+          data.age = age;
+        }
+
+        if (currentStep === 5) {
+          if (!data.mode) {
+            document.getElementById(
+              "modeError"
+            ).textContent =
+              "Select a mode.";
+
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function updateSelection(button) {
+
+        const interest =
+          button.dataset.interest;
+
+        const profession =
+          button.dataset.profession;
+
+        const experience =
+          button.dataset.experience;
+
+        const mode =
+          button.dataset.mode;
+
+        if (interest) {
+
+          const index =
+            data.interests.indexOf(interest);
+
+          if (index === -1) {
+            data.interests.push(interest);
+            button.classList.add("selected");
+          } else {
+            data.interests.splice(index, 1);
+            button.classList.remove("selected");
+          }
+
+          return;
+        }
+
+        if (profession) {
+
+          data.profession = profession;
+
+          document
+            .querySelectorAll("[data-profession]")
+            .forEach(function (item) {
+              item.classList.remove("selected");
+            });
+
+          button.classList.add("selected");
+
+          return;
+        }
+
+        if (experience) {
+
+          data.experience = experience;
+
+          document
+            .querySelectorAll("[data-experience]")
+            .forEach(function (item) {
+              item.classList.remove("selected");
+            });
+
+          button.classList.add("selected");
+
+          return;
+        }
+
+        if (mode) {
+
+          data.mode = mode;
+
+          document
+            .querySelectorAll("[data-mode]")
+            .forEach(function (item) {
+              item.classList.remove("selected");
+            });
+
+          button.classList.add("selected");
+        }
+      }
+
+      document
+        .querySelectorAll(".selection-card")
+        .forEach(function (button) {
+
+          button.addEventListener(
+            "click",
+            function () {
+              updateSelection(button);
+            }
+          );
+
+        });
+
+      async function saveProfile() {
+
+        if (
+          !window.LexonAuth ||
+          typeof window.LexonAuth.getUser !== "function"
+        ) {
+          throw new Error(
+            "Authentication is unavailable."
+          );
+        }
+
+        const user =
+          await window.LexonAuth.getUser();
+
+        if (!user) {
+          window.location.href =
+            "login.html";
+
+          return false;
+        }
+
+        if (
+          !window.LexonSupabase ||
+          typeof window.LexonSupabase.client !== "function"
+        ) {
+          throw new Error(
+            "Database connection is unavailable."
+          );
+        }
+
+        const client =
+          window.LexonSupabase.client();
+
+        if (!client) {
+          throw new Error(
+            "Database connection is unavailable."
+          );
+        }
+
+        const { error } =
+          await client
+            .from("profiles")
+            .upsert({
+              id: user.id,
+              email: user.email,
+              interests: data.interests,
+              profession: data.profession,
+              experience: data.experience,
+              age: Number(data.age),
+              mode: data.mode,
+              onboarding_completed: true,
+              updated_at:
+                new Date().toISOString()
+            });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        try {
+          localStorage.setItem(
+            "lexon_profile",
+            JSON.stringify({
+              id: user.id,
+              name:
+                user.user_metadata?.name ||
+                "",
+              email:
+                user.email ||
+                "",
+              interests: data.interests,
+              profession: data.profession,
+              experience: data.experience,
+              age: Number(data.age),
+              mode: data.mode
+            })
+          );
+
+          localStorage.setItem(
+            "lexon_mode",
+            data.mode
+          );
+        } catch {}
+
+        return true;
+      }
+
+      async function finishOnboarding() {
+
+        nextButton.disabled = true;
+        backButton.disabled = true;
+
+        nextButton.textContent =
+          "Saving...";
+
+        message.textContent = "";
+        message.className =
+          "form-message";
+
+        try {
+
+          const saved =
+            await saveProfile();
+
+          if (!saved) {
+            return;
+          }
+
+          window.location.href =
+            "../index.html";
+
+        } catch (error) {
+
+          message.textContent =
+            error.message ||
+            "Unable to save your profile.";
+
+          message.classList.add("error");
+
+          nextButton.disabled = false;
+          backButton.disabled = false;
+
+          nextButton.textContent =
+            "Finish";
+        }
+      }
+
+      nextButton.addEventListener(
+        "click",
+        function () {
+
+          if (!validateStep()) {
+            return;
+          }
+
+          if (currentStep < totalSteps) {
+            showStep(currentStep + 1);
+            return;
+          }
+
+          finishOnboarding();
+        }
+      );
+
+      backButton.addEventListener(
+        "click",
+        function () {
+
+          if (currentStep > 1) {
+            showStep(currentStep - 1);
+          }
+
+        }
+      );
+
+      if (ageInput) {
+        ageInput.addEventListener(
+          "input",
+          function () {
+            data.age = ageInput.value;
+          }
+        );
+      }
+
+      if (form) {
+        form.addEventListener(
+          "submit",
+          function (event) {
+            event.preventDefault();
+            nextButton.click();
+          }
+        );
+      }
+
+      showStep(1);
+    });
+  </script>
+
+</body>
+</html>
